@@ -38,6 +38,10 @@ ALTER USER tjoeun QUOTA UNLIMITED ON USERS;
 --ALTER USER tjoeun quota default tablespace users quota unlimited on user;
 --ALTER USER tjoeun quota 50M on user;
 
-
+-- workbook사용자 만들기
+ALTER SESSION SET "_oracle_script" = true;
+CREATE USER workbook IDENTIFIED BY 1234;
+GRANT CONNECT, RESOURCE TO workbook;
+ALTER USER workbook default tablespace users quota unlimited on users;
 
 
