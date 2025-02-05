@@ -44,4 +44,13 @@ CREATE USER workbook IDENTIFIED BY 1234;
 GRANT CONNECT, RESOURCE TO workbook;
 ALTER USER workbook default tablespace users quota unlimited on users;
 
+ALTER USER scott ACCOUNT UNLOCK;
+ALTER USER scott IDENTIFIED BY 1234;
+-- scott사용자 만들기
+
+ALTER SESSION SET "_oracle_script" = TRUE; -- (12c 이상에서 필요)
+CREATE USER scott IDENTIFIED BY 1234; -- 비밀번호는 원하는 값으로 변경
+GRANT CONNECT, RESOURCE TO scott;
+ALTER USER scott DEFAULT TABLESPACE users QUOTA UNLIMITED ON users;
+
 
