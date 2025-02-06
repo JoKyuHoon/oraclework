@@ -644,7 +644,7 @@ SELECT COUNT(*)
 FROM EMPLOYEE
 WHERE SUBSTR(EMP_NO, 8, 1) IN ('2', '4');
 
--- 보너스를 받는 사원의 수
+-- 보너스를 받는 사원의 수 
 SELECT COUNT(BONUS)
 FROM EMPLOYEE;
 
