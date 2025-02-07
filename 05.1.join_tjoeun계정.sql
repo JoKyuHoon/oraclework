@@ -11,19 +11,19 @@
     
     [JOIN 용어 정리]
 ------------------------------------------------------------------------------------------------------------------------
-                   오라클 전용 구문                      |                               ANSI                                         |
+                   오라클 전용 구문                      |                               ANSI                                          |
 ------------------------------------------------------------------------------------------------------------------------
-                      등가조인                              |          내부조인(INNER JOIN) => JOIN USING/ON          |
-                   (EQUAL JOIN)                          |          자연조인(NATURAL JOIN => JOIN USING            |
+                      등가조인                             |          내부조인(INNER JOIN) => JOIN USING/ON              |
+                   (EQUAL JOIN)                          |          자연조인(NATURAL JOIN => JOIN USING                |
 ------------------------------------------------------------------------------------------------------------------------
-                     포괄조인                               |                왼쪽 외부 조인(LEFT OUTER JOIN)                |
-                 (LEFT OUTER)                             |               오른쪽 외부 조인(RIGHT OUTER JOIN)           |
-                (RIGHT OUTER)                           |                전체 외부 조인(FULL OUTER JOIN)                |
+                     포괄조인                              |                왼쪽 외부 조인(LEFT OUTER JOIN)                      |
+                 (LEFT OUTER)                            |               오른쪽 외부 조인(RIGHT OUTER JOIN)                  |
+                (RIGHT OUTER)                           |                전체 외부 조인(FULL OUTER JOIN)                     |
  ------------------------------------------------------------------------------------------------------------------------
-                 자체조인(SELF JOIN)                    |                        JOIN ON                                          |
-         비등가 조인|(NON EQUAL JOIN)            |                                                                              |
+                 자체조인(SELF JOIN)                   |                        JOIN ON                                              |
+         비등가 조인|(NON EQUAL JOIN)            |                                                                                  |
  ------------------------------------------------------------------------------------------------------------------------
-         카테시안곱(CARTESIAN PRODUCT)        |                  교차조인(CORSS JOIN)                              |
+         카테시안곱(CARTESIAN PRODUCT)         |                  교차조인(CORSS JOIN)                                   |
  ------------------------------------------------------------------------------------------------------------------------     
 */
 -- 전체 사원의 사번, 사원명, 부서코드, 부서명을 조회
@@ -77,8 +77,13 @@ WHERE E.JOB_CODE = J.JOB_CODE;
 
 -- >> ANSI 구문
 -- FROM절에 기준이되는 테이블을 하나 기술한 후
--- JOIN절에 같이 조회하고자하는 테이블 기술 + 매칭시킬 컬럽에 대한 조건도 기술
+-- JOIN절에 같이 조회하고자하는 테이블 기술 + 매칭시킬 컬럼에 대한 조건도 기술
 -- JOIN USING, JOIN ON
+/*
+ON을 사용하면 컬럼명이 서로 다를 때도 사용 가능
+USING은 두 테이블의 컬럼명이 동일할 때만 사용 가능
+USING을 사용하면 중복 컬럼이 제거되므로 더 깔끔한 결과를 얻을 수 있음
+*/
 
 -- 1) 연결할 두 컬럼명이 서로 다른 경우(EMPLOYEE: DEPT_CODE, DEPARTMENT: DEPT_ID)
 -- 전체 사원의 사번, 사원명, 부서코드, 부서명을 조회
@@ -88,9 +93,11 @@ JOIN DEPARTMENT ON (DEPT_CODE = DEPT_ID);
 
 -- 2) 연결할 두 컬럼명이 서로 같은 경우(EMPLOYEE: JOB_CODE, JOB: JOB_CODE)
 -- 전체 사원의 사번, 사원명, 직급코드, 직급명을 조회
+/*
 SELECT EMP_ID, EMP_NAME, JOB_CODE, JOB_NAME
 FROM EMPLOYEE 
 JOIN JOB ON(JOB_CODE = JOB_CODE);  -- 오류
+*/
 
 -- 해결방법 1) 테이블에 테이블명 또는 별칭을 이용하는 방법
 SELECT EMP_ID, EMP_NAME, E.JOB_CODE, JOB_NAME
@@ -215,6 +222,7 @@ FULL JOIN DEPARTMENT ON (DEPT_CODE = DEPT_ID);
       매칭시킬 컬럼에 대한 조건 작성시 '='(등호)를 사용하지 않는 JOIN문
       ANSI구문으로는 JOIN ON으로만 가능 (USING사용 불가능)
 */
+
 -- 모든 사원들의 사원명, 급여, 급여레벨을 조회
 -- >> 오라클 전용 구문
 SELECT EMP_NAME, SALARY, SAL_LEVEL
@@ -258,7 +266,7 @@ LEFT JOIN EMPLOYEE M ON (E.MANAGER_ID = M.EMP_ID);
 /*
     EMPLOYEE        DEPT_CODE       JOB_CODE
     DEPARTMENT      DEPT_ID
-    JOB                                          JOB_CODE
+    JOB                                       JOB_CODE
 */
 -->> 오라클 전용 구문
 SELECT EMP_ID, EMP_NAME, DEPT_TITLE, JOB_NAME
@@ -292,9 +300,9 @@ JOIN LOCATION ON(LOCATION_ID = LOCAL_CODE);
 -- 1. 사번, 사원명, 부서명, 지역명, 국가명 조회(EMPLOYEE, DEPARTMENT, LOCATION, NATIONAL 조인)
 /*
     EMPLOYEE          DEPT_CODE
-    DEPARTMENT      DEPT_ID         LOCATION_ID
+    DEPARTMENT      DEPT_ID           LOCATION_ID
     LOCATION                               LOCAL_CODE      NATIONAL_CODE
-    NATIONAL                                                        NATIONAL_CODE
+    NATIONAL                                                      NATIONAL_CODE
 */
 
 -- >> 오라클 구문
@@ -314,8 +322,8 @@ WHERE DEPT_CODE = DEPT_ID
 SELECT EMP_ID, EMP_NAME, DEPT_TITLE, LOCAL_NAME, NATIONAL_NAME
 FROM EMPLOYEE
 JOIN DEPARTMENT  ON (DEPT_CODE = DEPT_ID)
-JOIN LOCATION  ON LOCATION_ID = LOCAL_CODE  -- DEPARTMENT와 LOCATION 연결
-JOIN NATIONAL  USING (NATIONAL_CODE);
+JOIN LOCATION ON (LOCATION_ID = LOCAL_CODE)  -- DEPARTMENT와 LOCATION 연결
+JOIN NATIONAL USING (NATIONAL_CODE);
 
 -- 2. 사번, 사원명, 부서명, 직급명, 지역명, 국가명, 급여등급 조회 (모든 테이블 다 조인)
 /*
@@ -343,3 +351,20 @@ JOIN JOB USING(JOB_CODE)
 JOIN LOCATION ON (LOCATION_ID = LOCAL_CODE)
 JOIN NATIONAL USING (NATIONAL_CODE)
 JOIN SAL_GRADE ON(SALARY BETWEEN MIN_SAL AND MAX_SAL);
+
+
+SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE 
+FROM USER_TAB_COLUMNS 
+WHERE TABLE_NAME IN ('EMPLOYEE', 'DEPARTMENT', 'LOCATION', 'NATIONAL')
+ORDER BY TABLE_NAME, COLUMN_NAME;
+
+
+SELECT COLUMN_NAME, LISTAGG(TABLE_NAME, ', ') WITHIN GROUP (ORDER BY TABLE_NAME) AS TABLES
+FROM USER_TAB_COLUMNS
+GROUP BY COLUMN_NAME
+HAVING COUNT(*) > 1
+ORDER BY COLUMN_NAME;
+
+
+
+

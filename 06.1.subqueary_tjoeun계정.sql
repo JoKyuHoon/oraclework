@@ -245,3 +245,53 @@ FROM EMPLOYEE
 WHERE (JOB_CODE, MANAGER_ID) = (SELECT JOB_CODE, MANAGER_ID
                                                   FROM EMPLOYEE
                                                   WHERE EMP_NAME = '하정연');
+                                                  
+                                                  
+                                                  
+                                                  
+                                                  
+                                                  
+                                                  
+                                                  
+                                                  
+                                                  
+-------------------------------------------------------------------------------------------------------------------------
+/*
+    * 순위 매기는 함수
+    RANK() OVER(정렬기준) | DENSE_RANK() OVER(정렬기준)
+    - RANK() OVER(정렬기준) : 동일한 순위 이후의 등수를 동일한 인원수 만큼 건너뛰어 순위 계산 
+                                       EX) 공동 1위가 2명이면 다음 순위는 3위
+    - DENSE_RANK() OVER(정렬기준) : 동일한 순위 이후의 등수를 1증가 시킨다 
+                                       EX) 공동 1위가 2명이면 다음 순위는 2위
+    -> SELECT 절에서만 사용 가능
+*/
+-- 급여가 높은 순서대로 순위를 매겨서 조회
+SELECT EMP_NAME, SALARY, RANK() OVER(ORDER BY SALARY DESC) 순위
+FROM EMPLOYEE;
+-- 공동 19위가 2명 -> 그 다음 순위는 21위     
+                       
+                                                  
+SELECT EMP_NAME, SALARY, DENSE_RANK() OVER(ORDER BY SALARY DESC) 순위
+FROM EMPLOYEE;
+-- 공동 19위가 2명 -> 그 다음 순위는 20위
+
+-- 급여가 상위 5위인 사원들의 사원명, 급여, 순위 조회
+SELECT EMP_NAME, SALARY, RANK() OVER(ORDER BY SALARY DESC) 순위
+FROM EMPLOYEE
+WHERE RANK() OVER(ORDER BY SALARY DESC) <= 5;
+-- 오류 : RANK() 함수는 SELECT절에서만 사용가능
+
+-->> 인라인 뷰를 사용할 수 밖에 없다
+SELECT *
+FROM (SELECT EMP_NAME, SALARY, DENSE_RANK() OVER(ORDER BY SALARY DESC) 순위
+          FROM EMPLOYEE)
+WHERE 순위 <= 5;
+
+-- WITH와 함께 사용
+WITH TOPN_SAL AS (SELECT EMP_NAME, SALARY, DENSE_RANK() OVER(ORDER BY SALARY DESC) 순위
+                            FROM EMPLOYEE)
+SELECT *
+FROM TOPN_SAL
+WHERE 순위 <= 5;
+
+
