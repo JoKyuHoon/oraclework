@@ -4,7 +4,7 @@ DROP TABLE JOB;
 DROP TABLE LOCATION;
 DROP TABLE NATIONAL;
 DROP TABLE SAL_GRADE;
- 
+
 -------------------------------------------------
 --- DDL for Table DEPARTMENT
 -------------------------------------------------
