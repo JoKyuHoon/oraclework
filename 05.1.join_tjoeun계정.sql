@@ -10,19 +10,19 @@
     - JOIN은 크게 "오라클전용구문"과 "ANSI 구문" (ANSI == 미국국립표준협회)  
     
                                                      [ JOIN 용어 정리]
-                        오라클 전용 구문                |                   ANSI
+                        오라클 전용 구문                 |                   ANSI
     -------------------------------------------------------------------------------------------------------
                             등가조인                       |       내부조인(INNER JOIN) => JOIN USING/ON
                         (EQUAL JOIN)                    |       자연조인(NATURAL JOIN) => JOIN USING
     -------------------------------------------------------------------------------------------------------
                             포괄조인                       |       왼쪽 외부 조인(LEFT OUTER JOIN)
-                        (LEFT OUTER)                    |        오른쪽 외부 조인(RIGHT OUTER JOIN) 
-                        (RIGHT OUTER)                  |        전체 외부 조인(FULL OUTER JOIN)
+                        (LEFT OUTER)                     |        오른쪽 외부 조인(RIGHT OUTER JOIN) 
+                        (RIGHT OUTER)                   |        전체 외부 조인(FULL OUTER JOIN)
     -------------------------------------------------------------------------------------------------------
-                 자체조인(SELF JOIN)                  |                         JOIN ON
-           비등가 조인(NON EQUAL JOIN)         |     
+                 자체조인(SELF JOIN)                   |                         JOIN ON
+           비등가 조인(NON EQUAL JOIN)           |     
     -------------------------------------------------------------------------------------------------------
-          카테시안곱(CARTESIAN RPODUCT)      |                 교차조인(CROSS JOIN)
+          카테시안곱(CARTESIAN RPODUCT)        |                 교차조인(CROSS JOIN)
 */
 -- 전체 사원의 사번, 사원명, 부서코드, 부서명을 조회
 SELECT EMP_ID, EMP_NAME, DEPT_CODE
@@ -64,7 +64,8 @@ WHERE DEPT_CODE = DEPT_ID;
 -- 전체 사원의 사번, 사원명, 직급코드, 직급명을 조회
 SELECT EMP_ID, EMP_NAME, JOB_CODE, JOB_NAME
 FROM EMPLOYEE, JOB
-WHERE JOB_CODE = JOB_CODE;
+WHERE JOB_CODE = JOB_CODE; -- 컬럼 이름이 같기때문에 오류
+
 
 -- 해결방법1) 테이블명을 이용하는 방법
 SELECT EMP_ID, EMP_NAME, EMPLOYEE.JOB_CODE, JOB_NAME
@@ -191,7 +192,7 @@ JOIN DEPARTMENT ON (DEPT_CODE = DEPT_ID);
 -- 1) LEFT [OUTER] JOIN : 두 테이블 중 왼쪽에 기술된 테이블을 기준으로 JOIN
 -->> ANSI 구문
 SELECT EMP_NAME, DEPT_TITLE, SALARY, SALARY*12 연봉
-FROM EMPLOYEE
+FROM EMPLOYEE 
 LEFT JOIN DEPARTMENT ON (DEPT_CODE = DEPT_ID);
 
 -->> 오라클 전용 구문
