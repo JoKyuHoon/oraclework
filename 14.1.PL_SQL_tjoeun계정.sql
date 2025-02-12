@@ -2,7 +2,7 @@
     * PL / SQL
       오라클 자체에 내장되어 있는 절차적 언어
       SQL 문장 내에서 변수 저의, 조건 처리(IF), 반복문(LOOP, FOR WHILE)등을 지원함
-      
+       
       * PL / SQL 구조
        - [선언부 (DECLARE SECTION)] : DECLARE로 시작, 변수나 상수정의 및 초기화하는 부분
        - 실행부 (EXECUTABLE SECTION) : BEGIN으로 시작, SQL문 또는 제어문(조건문, 반복문) 등의 로직을 기술하는 부분
