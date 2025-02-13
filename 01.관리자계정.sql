@@ -41,6 +41,8 @@ ALTER SESSION SET "_oracle_script" = true;
 CREATE USER workbook IDENTIFIED BY 1234;
 GRANT CONNECT, RESOURCE TO workbook;
 ALTER USER workbook default tablespace users quota unlimited on users;
+GRANT CREATE VIEW TO workbook;
+
 
 -- scott사용자 만들기
 ALTER SESSION SET "_oracle_script" = true;
