@@ -58,3 +58,23 @@ ALTER USER ddl default tablespace users quota unlimited on users;
 
 -- tjoeun view 생성 권한
 GRANT CREATE VIEW TO tjoeun;
+
+-- jsp사용자 만들기
+ALTER SESSION SET "_oracle_script" = true;
+CREATE USER jsp IDENTIFIED BY 1234;
+GRANT CONNECT, RESOURCE TO jsp;
+ALTER USER jsp default tablespace users quota unlimited on users;
+
+-- mybatis계정 만들기
+ALTER SESSION SET "_oracle_script" = true;
+CREATE USER mybatis IDENTIFIED BY 1234;
+GRANT CONNECT, RESOURCE TO mybatis;
+ALTER USER mybatis default tablespace users quota unlimited on users;
+
+-- jpa
+ALTER SESSION SET "_oracle_script" = true;
+CREATE USER jpa IDENTIFIED BY 1234;
+GRANT CONNECT, RESOURCE TO jpa;
+ALTER USER jpa default tablespace users quota unlimited on users;
+
+
